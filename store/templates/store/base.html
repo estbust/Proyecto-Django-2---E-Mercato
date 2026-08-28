@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Mercato</title>
+</head>
+<body>
+    <header style="display: flex; align-items: center; gap: 15px;">
+        <a href="{% url 'product_list' %}"><img src="{% static 'store/images/logo_e-mercato.png' %}" alt="Logo de E-Mercato" style="height: 160px; width: auto;"></a>
+        <nav>
+            <a href="{% url 'product_list' %}">Inicio</a>
+            
+            <div style="display: flex; align-items: center; gap: 15px;">
+    <!-- Django evalúa si el visitante tiene una sesión activa -->
+    {% if user.is_authenticated %}
+        <a style="color: #2c3e50; font-weight: bold;" href="{% url "profile" %}">
+            Hola, {{ user.username }}
+        </a>
+        
+        <!-- En versiones modernas de Django, el logout DEBE hacerse por POST por seguridad -->
+        <form method="POST" action="{% url 'logout' %}" style="margin: 0;" onsubmit="return confirm('¿Estás seguro de que deseas cerrar sesión en E-Mercato?');">
+            {% csrf_token %}
+            <button type="submit" style="background: none; border: none; color: #e74c3c; cursor: pointer; font-weight: bold; font-size: 16px;">
+                Cerrar Sesión
+            </button>
+        </form>
+        {% else %}
+        <a href="{% url 'welcome' %}" style="text-decoration: none; color: #2ecc71; font-weight: bold;">
+            Crear Cuenta / Iniciar Sesión
+        </a>
+        {% endif %}
+        </div>
+            
+            <!-- Carrito (puedes pasar un context processor para mostrar la cantidad total) -->
+            <a href="{% url 'cart_detail' %}">Carrito</a>
+        </nav>
+        {% if messages %}
+    <div style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
+        {% for message in messages %}
+            <!-- Le damos un estilo de 'Toast' o notificación moderna -->
+            <div style="background-color: #2ecc71; color: white; padding: 15px 25px; border-radius: 5px; margin-bottom: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); font-weight: bold;">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+    </header>
+    {% block content %}
+    {% endblock %}
+
+    <footer>
+        <p>&copy; 2026 E-Mercato. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>

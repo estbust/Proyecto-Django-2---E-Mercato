@@ -1,0 +1,38 @@
+{% extends "store/base.html" %}
+
+{% block content %}
+<div style="max-width: 900px; margin: auto; padding: 20px;">
+    <h2 style="color: #2c3e50; text-align: center; margin-bottom: 30px;">Mi Perfil</h2>
+
+    <!-- Contenedor Flexbox para dividir en dos columnas -->
+    <div style="display: flex; flex-wrap: wrap; gap: 30px;">
+        
+        <!-- Columna 1: Información Actual (El Espejo) -->
+        <div style="flex: 1; min-width: 300px; background: #ecf0f1; padding: 25px; border-radius: 8px;">
+            <h3 style="margin-top: 0; color: #34495e;">Datos de la Cuenta</h3>
+            <hr style="border: 0; height: 1px; background: #bdc3c7; margin-bottom: 20px;">
+            
+            <p><strong>Usuario:</strong> {{ user.username }}</p>
+            <p><strong>Nombre:</strong> {{ user.first_name|default:"No especificado" }}</p>
+            <p><strong>Apellido:</strong> {{ user.last_name|default:"No especificado" }}</p>
+            <p><strong>Correo:</strong> {{ user.email|default:"No especificado" }}</p>
+            <p><strong>Miembro desde:</strong> {{ user.date_joined|date:"d M Y" }}</p>
+        </div>
+
+        <!-- Columna 2: Formulario de Actualización (Las Herramientas) -->
+        <div style="flex: 1; min-width: 300px; background: #f8f9fa; padding: 25px; border-radius: 8px;">
+            <h3 style="margin-top: 0; color: #34495e;">Actualizar Información</h3>
+            <hr style="border: 0; height: 1px; background: #bdc3c7; margin-bottom: 20px;">
+            
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" style="width: 100%; padding: 12px; background-color: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 10px;">
+                    Guardar Cambios
+                </button>
+            </form>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,43 +1,78 @@
 {% extends "store/base.html" %}
+{% load static %}
+
+{% block title %}Mis Pedidos - E-Mercato{% endblock %}
 
 {% block content %}
+<div class="max-w-5xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
 
-{% load static %}
-<div style="font-family: sans-serif; padding: 20px; max-width: 800px; margin: auto;">
-    <nav style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+    <!-- Navegación y Encabezado -->
+    <div class="mb-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-6">
         <div>
-            <a href="{% url 'product_list' %}" style="text-decoration: none; color: #3498db; font-weight: bold;">← Volver a la tienda</a>
+            <h2 class="text-3xl md:text-4xl font-heading font-bold text-gray-900 tracking-tight">Mi Historial de Compras</h2>
+            <p class="text-gray-500 mt-2 font-medium">Revisa el estado y detalle de tus pedidos anteriores.</p>
         </div>
-    </nav>
-
-    <h2 style="color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px;">Mi Historial de Compras</h2>
+        <a href="{% url 'product_list' %}" class="inline-flex items-center gap-2 text-sm font-semibold text-petroleo hover:text-coral transition-colors bg-teal-50 hover:bg-teal-100 px-5 py-2.5 rounded-xl">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Volver a la tienda
+        </a>
+    </div>
 
     {% if orders %}
-        <table style="width: 100%; border-collapse: collapse; margin-top: 20px; text-align: left;">
-            <thead>
-                <tr style="background-color: #f8f9fa;">
-                    <th style="padding: 12px; border-bottom: 2px solid #ddd;">Nº Pedido</th>
-                    <th style="padding: 12px; border-bottom: 2px solid #ddd;">Fecha</th>
-                    <th style="padding: 12px; border-bottom: 2px solid #ddd;">Estado</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for order in orders %}
-                    <tr style="border-bottom: 1px solid #eee;">
-                        <td style="padding: 12px; font-weight: bold;">#{{ order.id }}</td>
-                        <!-- Usamos un filtro de Django para formatear la fecha -->
-                        <td style="padding: 12px;">{{ order.created_at|date:"d F, Y" }}</td>
-                        <td style="padding: 12px;">
-                                <span style="color: #27ae60; font-weight: bold;">Pagado</span>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <!-- Tabla de Pedidos -->
+        <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-50 border-b border-gray-100 text-xs font-bold text-gray-400 uppercase tracking-wider">
+                            <th class="py-5 px-6 whitespace-nowrap">Nº Pedido</th>
+                            <th class="py-5 px-6 whitespace-nowrap">Fecha</th>
+                            <th class="py-5 px-6 whitespace-nowrap">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100 text-sm">
+                        {% for order in orders %}
+                            <tr class="hover:bg-gray-50/50 transition-colors group">
+                                <td class="py-4 px-6 font-bold text-gray-900">
+                                    #{{ order.id }}
+                                </td>
+                                <td class="py-4 px-6 text-gray-600 font-medium flex items-center gap-2 whitespace-nowrap">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    <!-- Formateo de fecha dinámico de Django -->
+                                    {{ order.created_at|date:"d F, Y" }}
+                                </td>
+                                <td class="py-4 px-6">
+                                    <!-- Badge de Estado -->
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100 whitespace-nowrap">
+                                        <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                                        Pagado
+                                    </span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     {% else %}
-        <div style="text-align: center; margin-top: 50px; color: #7f8c8d;">
-            <p>Aún no has realizado ninguna compra con nosotros.</p>
+        <!-- Estado Vacío (Empty State) -->
+        <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-12 sm:p-16 text-center">
+            <div class="h-20 w-20 mx-auto bg-gray-50 text-gray-300 rounded-full flex items-center justify-center mb-6 shadow-inner">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+            </div>
+            <h3 class="text-xl font-heading font-bold text-gray-800 mb-2">Aún no has realizado ninguna compra</h3>
+            <p class="text-gray-500 text-sm mb-8 max-w-md mx-auto">Cuando realices tu primer pedido, aparecerá aquí con todo el detalle de su fecha y estado.</p>
+            <a href="{% url 'product_list' %}" class="inline-flex items-center justify-center gap-2 bg-petroleo text-white font-semibold px-6 py-3 rounded-xl hover:bg-teal-800 transition-colors shadow-sm">
+                Explorar el catálogo
+            </a>
         </div>
     {% endif %}
+
 </div>
 {% endblock %}

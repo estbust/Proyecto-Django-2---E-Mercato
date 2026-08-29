@@ -1,6 +1,6 @@
 from django.contrib.admin import views
 from django.urls import path
-from .views import product_list, product_detail, add_to_cart, cart_detail, create_order, order_success, customer_orders, welcome, register, profile
+from .views import product_list, product_detail, add_to_cart, cart_detail, create_order, order_success, customer_orders, welcome, register, profile, remove_from_cart
 
 urlpatterns = [
     path('', product_list, name='product_list'),
@@ -14,4 +14,5 @@ urlpatterns = [
     path('welcome/', welcome, name='welcome'),
     path('registro/', register, name='register'),
     path('perfil/', profile, name='profile'),
+    path('remover/<int:product_id>/', remove_from_cart, name='remove_from_cart'),
 ]

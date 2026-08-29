@@ -1,19 +1,58 @@
+{% extends "store/base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Bienvenido | E-Mercato</title>
-</head>
-<body style="font-family: sans-serif; padding: 50px; text-align: center; max-width: 400px; margin: auto;">
-    <img src="{% static 'store/images/logo_e-mercato.png' %}" alt="Logo E-Mercato" style="height: 200px; margin-bottom: 20px;">
 
-    <h2>Eres nuevo aquí?</h2>
-    <p>¡Crea una cuenta para comenzar a comprar en E-Mercato!</p>
-    <a href="{% url 'register' %}" style="text-decoration: none; color: white; background-color: #28a745; padding: 5px 10px; border-radius: 3px;">Crear Cuenta</a>
-    <br>
-    <h2>¿Ya tienes una cuenta?</h2>
-    <p>Inicia sesión para acceder a tu cuenta y continuar comprando en E-Mercato.</p>
-    <a href="{% url 'login' %}" style="text-decoration: none; color: white; background-color: #007bff; padding: 5px 10px; border-radius: 3px;">Iniciar Sesión</a>
-</body>
-</html>
+{% block title %}Bienvenido | E-Mercato{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-center min-h-[70vh] py-10 px-4 sm:px-6">
+    
+    <!-- Tarjeta Principal de Bienvenida -->
+    <div class="bg-white rounded-3xl border border-gray-100 shadow-xl p-8 sm:p-12 max-w-lg w-full text-center relative overflow-hidden">
+        
+        <!-- Detalle decorativo superior con gradiente -->
+        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-petroleo to-coral"></div>
+
+        <!-- Logo de E-Mercato -->
+        <!-- Redujimos un poco la altura original de 200px para equilibrar el diseño en móviles -->
+        <img src="{% static 'store/images/logo_e-mercato.png' %}" alt="Logo E-Mercato" class="h-28 mx-auto mb-8 transition-transform duration-300 hover:scale-105">
+
+        <h1 class="text-3xl font-heading font-bold text-gray-900 mb-3 tracking-tight">¡Bienvenido a E-Mercato!</h1>
+        <p class="text-gray-500 mb-10 font-medium">Únete a nuestra comunidad y descubre un catálogo pensado para ti.</p>
+
+        <div class="space-y-6">
+            
+            <!-- Sección: Crear Cuenta (Llamado a la acción principal) -->
+            <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 shadow-inner">
+                <h2 class="text-lg font-bold text-gray-800 mb-2">¿Eres nuevo aquí?</h2>
+                <p class="text-sm text-gray-500 mb-5">Crea una cuenta para comenzar a comprar en E-Mercato de forma rápida y segura.</p>
+                <a href="{% url 'register' %}" class="flex items-center justify-center gap-2 w-full bg-coral hover:bg-orange-600 active:bg-orange-700 text-white font-bold py-3.5 px-6 rounded-xl shadow-md transition-all duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                    </svg>
+                    Crear Cuenta
+                </a>
+            </div>
+
+            <!-- Divisor visual -->
+            <div class="relative flex py-2 items-center">
+                <div class="flex-grow border-t border-gray-200"></div>
+                <span class="flex-shrink-0 mx-4 text-gray-400 text-sm font-semibold">O</span>
+                <div class="flex-grow border-t border-gray-200"></div>
+            </div>
+
+            <!-- Sección: Iniciar Sesión (Llamado a la acción secundario) -->
+            <div class="p-2">
+                <h2 class="text-lg font-bold text-gray-800 mb-2">¿Ya tienes una cuenta?</h2>
+                <p class="text-sm text-gray-500 mb-5">Inicia sesión para acceder a tu historial y continuar comprando.</p>
+                <a href="{% url 'login' %}" class="flex items-center justify-center gap-2 w-full bg-white text-petroleo border-2 border-petroleo hover:bg-petroleo hover:text-white font-bold py-3.5 px-6 rounded-xl transition-all duration-200 group">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                    </svg>
+                    Iniciar Sesión
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

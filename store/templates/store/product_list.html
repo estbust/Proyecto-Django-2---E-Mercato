@@ -1,52 +1,107 @@
 {% extends "store/base.html" %}
 
 {% block content %}
-<div style="margin-bottom: 20px;">
-    <h1>Bienvenido a E-Mercato!</h1>
-    <p><em>Si lo quieres, lo tienes</em></p>
+<!-- Hero / Bienvenida -->
+<div class="mb-12 text-center mt-4">
+    <h1 class="text-4xl md:text-5xl font-heading font-bold text-petroleo mb-2 tracking-tight">¡Bienvenido a E-Mercato!</h1>
+    <p class="text-lg text-gray-500 italic font-medium">"Si lo quieres, lo tienes"</p>
 </div>
-<!-- Menú de Categorías -->
-<div style="margin-bottom: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 5px;">
-    <h3 style="margin-top: 0;">Categorías</h3>
-    <ul style="list-style-type: none; padding: 0; display: flex; gap: 15px;">
-        <!-- Enlace para ver TODOS los productos -->
-        <li>
-            <a href="{% url 'product_list' %}" style="text-decoration: none; font-weight: {% if not category %}bold{% else %}normal{% endif %};">
-                Todas
-            </a>
-        </li>
-        
-        <!-- Bucle para mostrar cada categoría de la base de datos -->
-        {% for c in categories %}
+
+<!-- Navegación de Categorías -->
+<div class="mb-10 bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+    <div class="flex flex-col md:flex-row md:items-center gap-4">
+        <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider m-0 min-w-max">Categorías:</h3>
+        <ul class="flex flex-wrap gap-3 w-full">
+            
+            <!-- Enlace para ver TODOS los productos -->
             <li>
-                <a href="{% url 'product_list_by_category' c.slug %}" 
-                   style="text-decoration: none; font-weight: {% if category and category.id == c.id %}bold{% else %}normal{% endif %};">
-                    {{ c.name }}
+                <!-- Si NO hay categoría activa, este botón se pinta de petróleo -->
+                <a href="{% url 'product_list' %}" 
+                   class="px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 inline-block
+                   {% if not category %}bg-petroleo text-white shadow-md{% else %}bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-petroleo{% endif %}">
+                    Todas
                 </a>
             </li>
-        {% endfor %}
-    </ul>
+            
+            <!-- Bucle para mostrar cada categoría de la base de datos -->
+            {% for c in categories %}
+                <li>
+                    <!-- Comparamos el ID para saber si es la categoría actual -->
+                    <a href="{% url 'product_list_by_category' c.slug %}" 
+                       class="px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 inline-block
+                       {% if category and category.id == c.id %}bg-petroleo text-white shadow-md{% else %}bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-petroleo{% endif %}">
+                        {{ c.name }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 </div>
 
-<!-- Título dinámico para saber qué estamos viendo -->
-
+<!-- Título dinámico de la sección -->
+<div class="mb-8 flex flex-col sm:flex-row sm:items-baseline gap-3">
     {% if category %}
-        <h2>Productos en la categoría: {{ category.name }}</h2>
+        <h2 class="text-2xl font-heading font-bold text-gray-800">
+            Productos en: <span class="text-petroleo border-b-2 border-coral pb-1">{{ category.name }}</span>
+        </h2>
     {% else %}
-        <h2>Productos destacados</h2>
-        <p>Explora las categorias para ver todos nuestros productos.</p>
+        <h2 class="text-2xl font-heading font-bold text-gray-800 border-b-2 border-coral pb-1 inline-block">
+            Productos destacados
+        </h2>
+        <p class="text-gray-500 text-sm">Explora las categorías para ver todos nuestros productos.</p>
     {% endif %}
+</div>
 
-<!-- ... aquí mantienes tu bucle actual de productos (for product in products) ... -->
-<div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px;">
+<!-- Cuadrícula de Productos (CSS Grid) -->
+<!-- Cambiamos el flex por grid: 1 col en móvil, 2 en tablet pequeña, 3 en desktop -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+    
     {% for product in products %}
-        <div style="border: 1px solid #ddd; padding: 15px; border-radius: 5px; width: calc(33.333% - 20px); box-sizing: border-box;">
-            <h3><a href="{% url 'product_detail' product.id %}">{{ product.name }}</a></h3>
-            <p>Precio: ${{ product.price }}</p>
-            <a href="{% url 'add_to_cart' product.id %}" style="text-decoration: none; color: white; background-color: #007bff; padding: 5px 10px; border-radius: 3px;">Agregar al carrito</a>
+        <!-- Tarjeta individual -->
+        <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group">
+            {% if product.image %}
+                <div class="bg-gray-50 rounded-xl h-48 mb-5 flex items-center justify-center border border-gray-100 group-hover:bg-gray-100 transition-colors overflow-hidden">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="h-full object-contain">
+                </div>
+            {% endif %}
+            <!-- (Opcional) Espacio reservado para imágenes del producto -->
+            {% if not product.image %}
+            <div class="bg-gray-50 rounded-xl h-48 mb-5 flex items-center justify-center border border-gray-100 group-hover:bg-gray-100 transition-colors overflow-hidden">
+                <span class="text-gray-300 text-sm font-medium italic">Imagen no disponible</span>
+            </div>
+            {% endif %}
+
+            <!-- Título del producto -->
+            <h3 class="text-lg font-heading font-bold text-gray-800 mb-2 leading-tight">
+                <a href="{% url 'product_detail' product.id %}" class="hover:text-petroleo transition-colors">
+                    {{ product.name }}
+                </a>
+            </h3>
+            
+            <!-- Precio -->
+            <p class="text-2xl font-bold text-petroleo mb-6 mt-auto">
+                ${{ product.price }}
+            </p>
+            
+            <!-- Botón Agregar al Carrito -->
+            <a href="{% url 'add_to_cart' product.id %}" 
+               class="w-full text-center bg-coral text-white font-semibold py-2.5 rounded-xl hover:bg-orange-600 active:bg-orange-700 transition-colors shadow-sm hover:shadow flex justify-center items-center gap-2">
+               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+               </svg>
+               Agregar
+            </a>
         </div>
+        
     {% empty %}
-        <p>No hay productos disponibles en este momento.</p>
+        <!-- Estado Vacío (Empty State) -->
+        <div class="col-span-full py-16 text-center bg-white rounded-2xl border-2 border-gray-100 border-dashed">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+            </svg>
+            <p class="text-gray-500 font-medium text-lg">No hay productos disponibles en este momento.</p>
+            <a href="{% url 'product_list' %}" class="text-petroleo font-semibold hover:underline mt-2 inline-block">Ver todos los productos</a>
+        </div>
     {% endfor %}
 </div>
 {% endblock %}

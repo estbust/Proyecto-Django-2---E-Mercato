@@ -1,6 +1,6 @@
 from django.contrib.admin import views
 from django.urls import path
-from .views import product_list, product_detail, add_to_cart, cart_detail, create_order, order_success, customer_orders, welcome, register, profile, remove_from_cart
+from .views import product_list, product_detail, add_to_cart, cart_detail, create_order, order_success, customer_orders, welcome, register, profile, remove_from_cart, SellerOrderListView, SellerOrderUpdateView
 
 urlpatterns = [
     path('', product_list, name='product_list'),
@@ -15,4 +15,6 @@ urlpatterns = [
     path('registro/', register, name='register'),
     path('perfil/', profile, name='profile'),
     path('remover/<int:product_id>/', remove_from_cart, name='remove_from_cart'),
+    path('panel/pedidos/', SellerOrderListView.as_view(), name='seller_dashboard'),
+    path('panel/pedidos/<int:pk>/', SellerOrderUpdateView.as_view(), name='seller_order_detail'),
 ]

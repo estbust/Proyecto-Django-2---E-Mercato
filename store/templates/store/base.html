@@ -66,6 +66,12 @@
                             <a href="{% url 'profile' %}" class="text-sm font-semibold text-petroleo hover:text-coral transition-colors">
                                 Hola, {{ user.username }}
                             </a>
+
+                            {% if user.is_staff %}
+                                <a href="{% url 'seller_dashboard' %}" class="text-sm font-semibold text-[#1c3d4a] hover:text-[#004d4d] transition-colors">
+                                    Panel de Gestión
+                                </a>
+                            {% endif %}
                             
                             <!-- Logout vía POST con confirmación -->
                             <form method="POST" action="{% url 'logout' %}" class="m-0" onsubmit="return confirm('¿Estás seguro de que deseas cerrar sesión en E-Mercato?');">

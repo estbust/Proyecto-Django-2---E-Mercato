@@ -1,5 +1,7 @@
 # E-Mercato 🛒
 
+!Bienvenido a mi proyecto de Django para el master de Conquer Blocks!
+
 E-Mercato es una plataforma de comercio electrónico minimalista desarrollada con Python y Django. Este proyecto está diseñado para ofrecer una experiencia de usuario fluida, permitiendo la exploración del catálogo, gestión del carrito de compras y creación de pedidos, respaldado por un sistema robusto de control de inventario y un panel de administración personalizado.
 
 ## Características Principales

@@ -85,25 +85,20 @@ def cart_detail(request):
 def remove_from_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
 
-    # El carrito SIEMPRE vive en la sesión antes del checkout, 
-    # sin importar si el usuario está autenticado o no.
     cart = request.session.get('cart', {})
     product_id_str = str(product_id)
 
     if product_id_str in cart:
-        # Reducimos cantidad o eliminamos del diccionario de la sesión
         if cart[product_id_str] > 1:
             cart[product_id_str] -= 1
             messages.success(request, f'Se redujo la cantidad de {product.name}.')
         else:
             del cart[product_id_str]
             messages.error(request, f'{product.name} fue eliminado del carrito.')
-        
-        # CORRECCIÓN: Devolver el stock a la base de datos del catálogo
+
         product.stock += 1
         product.save()
-        
-        # Actualizamos la sesión para que Django guarde los cambios
+
         request.session['cart'] = cart
         request.session.modified = True 
 
@@ -189,23 +184,20 @@ class SellerOrderListView(UserPassesTestMixin, ListView):
     template_name = 'store/seller_order_list.html'
     context_object_name = 'orders'
     
-    # Solo mostramos pedidos que ya fueron pagados o completados
     queryset = Order.objects.filter(paid=True).order_by('-created_at')
 
-    # Seguridad: Solo permite el acceso si el usuario es staff (vendedor/admin)
     def test_func(self):
         return self.request.user.is_staff
 
-    # Redirige a la página de inicio si no pasa la prueba
     def handle_no_permission(self):
         return redirect('welcome')
 
 class SellerOrderUpdateView(UserPassesTestMixin, UpdateView):
     model = Order
-    fields = ['status'] # Solo permitimos modificar el estado
+    fields = ['status']
     template_name = 'store/seller_order_detail.html'
     context_object_name = 'order'
-    success_url = reverse_lazy('seller_dashboard') # Redirige a la lista tras guardar
+    success_url = reverse_lazy('seller_dashboard')
 
     def test_func(self):
         return self.request.user.is_staff
